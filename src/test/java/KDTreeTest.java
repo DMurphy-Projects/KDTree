@@ -1,5 +1,4 @@
 import java.util.Arrays;
-import Model.Node;
 
 public class KDTreeTest {
 
@@ -50,24 +49,23 @@ public class KDTreeTest {
         return sub;
     }
 
+    public KDTreeNode createKDTree(double[][] list)
+    {
+        return createKDTree(list, 0, list.length, 0);
+    }
+
     public KDTreeNode createKDTree(double[][] list, int low, int high, int depth)
     {
-        int length = high - low;
-        if (length == 0) return null;
+        if (low >= high) return null;
 
         int axis = depth % list[0].length;
-        if (length == 1)
-        {
-            //create leaf
-            return new KDTreeNode(INDEX++, list[low], axis, null, null);
-        }
-
-        quickSort(list, low, high, axis);
+        quickSort(list, low, high-1, axis);
 
         int mid = (low + high) / 2;
+
         return new KDTreeNode(INDEX++, list[mid], axis,
                 createKDTree(list, low, mid, depth+1),
-                createKDTree(list, mid, high, depth+1));
+                createKDTree(list, mid+1, high, depth+1));
     }
 
     public double[][] createTestData(int width, int height)
