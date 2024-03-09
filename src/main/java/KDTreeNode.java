@@ -32,38 +32,23 @@ public class KDTreeNode extends Node<Edge<KDTreeNode>> {
 
     public void nearest(double[] search, BestNode bestNode)
     {
-        if (isLeaf())
-        {
-            double distance = distance(search);
-            if (bestNode.distance > distance)
-            {
-                bestNode.node = this;
-                bestNode.distance = distance;
-            }
+        double distance = distance(search);
+        if (bestNode.distance > distance) {
+            bestNode.node = this;
+            bestNode.distance = distance;
         }
-        else
-        {
-            Node first;
-            if (search[axis] <= getValue())
-            {
-                first = left();
-            }
-            else
-            {
-                first = right();
-            }
+        if (bestNode.distance == 0) return;
 
-            if (first == left())
-            {
-                if (search[axis] - bestNode.distance <= getValue()) left().nearest(search, bestNode);
-                if (search[axis] + bestNode.distance >  getValue()) right().nearest(search, bestNode);
-            }
-            else
-            {
-                if (search[axis] + bestNode.distance >  getValue()) right().nearest(search, bestNode);
-                if (search[axis] - bestNode.distance <= getValue()) left().nearest(search, bestNode);
-            }
-        }
+        double d = point[axis] - search[axis];
+
+        KDTreeNode first;
+        if (d > 0) { first = left(); } else { first = right(); }
+        if (first != null) first.nearest(search, bestNode);
+
+        if (d * d > bestNode.distance) return;
+
+        if (d > 0) { first = right(); } else { first = left(); }
+        if (first != null) first.nearest(search, bestNode);
     }
 
     public double distance(double[] p)
@@ -71,7 +56,7 @@ public class KDTreeNode extends Node<Edge<KDTreeNode>> {
         double d = 0;
         for (int i=0;i<point.length;i++)
         {
-            d += Math.abs(point[i] - p[i]);
+            d += (point[i] - p[i]) * (point[i] - p[i]);
         }
         return d;
     }
