@@ -85,26 +85,83 @@ public class KDTreeTest {
         return data;
     }
 
-    public static void main(String[] args)
+    public static void testFullLookup(int w, int h)
     {
         KDTreeTest test = new KDTreeTest();
 
-        double[][] points = test.createTestData(100, 100);
+        double[][] points = test.createTestData(w, h);
 
-        double[][] treePoints = points;
         long t1 = System.currentTimeMillis();
-        KDTreeNode tree = test.createKDTree(treePoints, 0, treePoints.length-1, 0);
+        KDTreeNode tree = test.createKDTree(points);
+//        tree.printTree("Start");
+
+        long t2 = System.currentTimeMillis();
+        for (int i=0;i<w;i++)
+        {
+            for (int j=0;j<h;j++)
+            {
+                KDTreeNode.BestNode bestNode = new KDTreeNode.BestNode(null, Double.MAX_VALUE);
+                tree.nearest(new double[]{i, j}, bestNode);
+
+                if (bestNode.distance != 0)
+                {
+                    System.out.println(String.format("i: %s j: %s d: %s n: %s",
+                            i, j, bestNode.distance, Arrays.toString(bestNode.node.point)));
+                }
+            }
+        }
+
+        long t3 = System.currentTimeMillis();
+
+        System.out.println(String.format("Size of Tree: %s->%s", points.length, test.INDEX));
+        System.out.println(String.format("Tree Creation: %s", t2 - t1));
+        System.out.println(String.format("Tree Nearest Search: %s", t3 - t2));
+    }
+
+    public static void testSingleLookup(double[][] points, double[] lookup)
+    {
+        KDTreeTest test = new KDTreeTest();
+
+        long t1 = System.currentTimeMillis();
+        KDTreeNode tree = test.createKDTree(points);
 //        tree.printTree("Start");
 
         long t2 = System.currentTimeMillis();
         KDTreeNode.BestNode bestNode = new KDTreeNode.BestNode(null, Double.MAX_VALUE);
-        tree.nearest(new double[]{50, 50}, bestNode);
+        tree.nearest(lookup, bestNode);
+
         long t3 = System.currentTimeMillis();
 
-        System.out.println(Arrays.toString(bestNode.node.point));
-
-        System.out.println(String.format("Size of Tree: %s", treePoints.length));
+        System.out.println(String.format("Best Match: %s", Arrays.toString(bestNode.node.point)));
+        System.out.println(String.format("Size of Tree: %s->%s", points.length, test.INDEX));
         System.out.println(String.format("Tree Creation: %s", t2 - t1));
         System.out.println(String.format("Tree Nearest Search: %s", t3 - t2));
+    }
+
+    public static void testDuplicateData()
+    {
+        testSingleLookup(new double[][]{{0, 0}, {0, 0}, {0, 0}, {1, 1}, {1, 1}, {2, 2}},
+                new double[]{2, 2});
+    }
+
+    public static void testSmallFullLookup()
+    {
+        testFullLookup(10, 10);
+    }
+    public static void testMediumFullLookup()
+    {
+        testFullLookup(100, 100);
+    }
+    public static void testLargeLookup()
+    {
+        testFullLookup(1000, 1000);
+    }
+
+    public static void main(String[] args)
+    {
+        testSmallFullLookup();
+//        testMediumFullLookup();
+//        testLargeLookup();
+//        testDuplicateData();
     }
 }
