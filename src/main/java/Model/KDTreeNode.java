@@ -2,19 +2,7 @@ package Model;
 
 import java.util.Arrays;
 
-public class KDTreeNode extends Node<Edge<KDTreeNode>> {
-
-    public static class BestNode
-    {
-        public KDTreeNode node;
-        public double distance;
-
-        public BestNode(KDTreeNode n, double d)
-        {
-            node = n;
-            distance = d;
-        }
-    }
+public class KDTreeNode<T extends KDTreeNode> extends Node<Edge<T>> {
 
     double[] point;
     int axis, LEFT = 0, RIGHT = 1;
@@ -25,8 +13,8 @@ public class KDTreeNode extends Node<Edge<KDTreeNode>> {
         point = p;
         axis = a;
 
-        connect(new Edge<KDTreeNode>(this, l));
-        connect(new Edge<KDTreeNode>(this, r));
+        connect(new Edge(this, l));
+        connect(new Edge(this, r));
     }
 
     public void nearest(double[] search, BestNode bestNode)
@@ -75,12 +63,12 @@ public class KDTreeNode extends Node<Edge<KDTreeNode>> {
         return point;
     }
 
-    public KDTreeNode left()
+    public T left()
     {
         return getEdges().get(LEFT).getTo();
     }
 
-    public KDTreeNode right()
+    public T right()
     {
         return getEdges().get(RIGHT).getTo();
     }

@@ -1,3 +1,4 @@
+import Model.BestNode;
 import Model.KDTreeNode;
 
 import java.util.Arrays;
@@ -100,7 +101,7 @@ public class KDTreeTest {
         {
             for (int j=0;j<h;j++)
             {
-                KDTreeNode.BestNode bestNode = new KDTreeNode.BestNode(null, Double.MAX_VALUE);
+                BestNode bestNode = new BestNode<KDTreeNode>(null, Double.MAX_VALUE);
                 tree.nearest(new double[]{i, j}, bestNode);
 
                 if (bestNode.distance != 0)
@@ -127,7 +128,7 @@ public class KDTreeTest {
 //        tree.printTree("Start");
 
         long t2 = System.currentTimeMillis();
-        KDTreeNode.BestNode bestNode = new KDTreeNode.BestNode(null, Double.MAX_VALUE);
+        BestNode bestNode = new BestNode<KDTreeNode>(null, Double.MAX_VALUE);
         tree.nearest(lookup, bestNode);
 
         long t3 = System.currentTimeMillis();
