@@ -1,3 +1,5 @@
+import Model.KDTreeNode;
+
 import java.util.Arrays;
 
 public class KDTreeTest {
@@ -104,7 +106,7 @@ public class KDTreeTest {
                 if (bestNode.distance != 0)
                 {
                     System.out.println(String.format("i: %s j: %s d: %s n: %s",
-                            i, j, bestNode.distance, Arrays.toString(bestNode.node.point)));
+                            i, j, bestNode.distance, Arrays.toString(bestNode.node.getPoint())));
                 }
             }
         }
@@ -130,7 +132,7 @@ public class KDTreeTest {
 
         long t3 = System.currentTimeMillis();
 
-        System.out.println(String.format("Best Match: %s", Arrays.toString(bestNode.node.point)));
+        System.out.println(String.format("Best Match: %s", Arrays.toString(bestNode.node.getPoint())));
         System.out.println(String.format("Size of Tree: %s->%s", points.length, test.INDEX));
         System.out.println(String.format("Tree Creation: %s", t2 - t1));
         System.out.println(String.format("Tree Nearest Search: %s", t3 - t2));

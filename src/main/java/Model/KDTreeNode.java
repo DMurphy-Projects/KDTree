@@ -1,5 +1,4 @@
-import Model.Edge;
-import Model.Node;
+package Model;
 
 import java.util.Arrays;
 
@@ -69,6 +68,11 @@ public class KDTreeNode extends Node<Edge<KDTreeNode>> {
     public double getValue()
     {
         return point[axis];
+    }
+
+    public double[] getPoint()
+    {
+        return point;
     }
 
     public KDTreeNode left()
